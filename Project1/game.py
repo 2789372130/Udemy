@@ -8,17 +8,27 @@ class Board:
 
     Attributes
     ----------
-    row1 : list of chars
-        first row of game board
-    row2 : list of chars
-        second row of game board
-    row3 : list of chars
-        third row of game board
+    current_player: char
+        The token refers to the current player's turn
+    player_number: int
+        The number of human players
+    row1: list of chars
+        First row of game board
+    row2: list of chars
+        Second row of game board
+    row3: list of chars
+        Third row of game board
 
     Methods
     -------
-    info(additional=""):
-        Prints the person's name and age.
+    change_player:
+    input_location:
+    print_game_state:
+    end_state:
+    init_board:
+    detect_input:
+    validate_input:
+
     """
 
     current_player = 'O'
@@ -37,9 +47,11 @@ class Board:
         return f"{self.row1[0]} | {self.row1[1]} | {self.row1[2]}\n" +\
             f"{self.row2[0]} | {self.row2[1]} | {self.row2[2]}\n" +\
             f"{self.row3[0]} | {self.row3[1]} | {self.row3[2]}\n"
-        # return f"{self.row1}\n{self.row2}\n{self.row3}"
 
     def change_player(self):
+        '''
+        Change the current player's token to determine whose turn it is
+        '''
         if self.current_player == 'O':
             self.current_player = 'X'
         else:
@@ -47,6 +59,9 @@ class Board:
         pass
 
     def input_location(self, row, column):
+        '''
+        Update the game board by invalid inputs
+        '''
         cp = self.current_player
         if row == 1:
             self.row1[column-1] = cp
@@ -57,6 +72,12 @@ class Board:
         pass
 
     def print_game_state(self):
+        '''
+        Generate the game state string
+        
+            Return:
+                (str): Current player's token + row1 + row2 + row3
+        '''
         return self.current_player +\
             "".join(map(str, self.row1)) +\
             "".join(map(str, self.row2)) +\
@@ -119,14 +140,12 @@ class Board:
 
 # INIT_STATE = False
 
-
 def init_board(player_number):
     '''
     Create an empty board
     '''
     # if INIT_STATE: pass
     row = ['*', '*', '*']
-    row2 = ['O', 'X', 'O']
     game_board = Board(player_number, row, row.copy(), row.copy())
     # INIT_STATE = True
     return game_board
