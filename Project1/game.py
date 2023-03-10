@@ -46,6 +46,16 @@ class Board:
             self.current_player = 'O'
         pass
 
+    def input_location(self, row, column):
+        cp = self.current_player
+        if row == 1:
+            self.row1[column-1] = cp
+        elif row == 2:
+            self.row2[column-1] = cp
+        else:
+            self.row3[column-1] = cp
+        pass
+
     def print_game_state(self):
         return self.current_player +\
             "".join(map(str, self.row1)) +\
@@ -117,12 +127,12 @@ def init_board(player_number):
     # if INIT_STATE: pass
     row = ['*', '*', '*']
     row2 = ['O', 'X', 'O']
-    game_board = Board(player_number, row2, row2, row2)
+    game_board = Board(player_number, row, row.copy(), row.copy())
     # INIT_STATE = True
     return game_board
 
 
-def detect_input():
+def detect_input(game_board):
     '''
     Recieve user inputs and return the valid pair
     '''
@@ -130,7 +140,7 @@ def detect_input():
     while validation:
         row = input("Please first enter the row number(1-3)")
         column = input("Please then enter the column number(1-3)")
-        if not validate_input(int(row), int(column)):
+        if not validate_input(game_board, int(row), int(column)):
             # tkinter.messagebox.showwarning(title="Error", message="Invalid input(s)")
             input("Invalid input(s), press Enter to redo")
         else:
@@ -138,7 +148,7 @@ def detect_input():
     return int(row), int(column)
 
 
-def validate_input(row, column):
+def validate_input(game_board, row, column):
     '''
     Check if the inputs are valid
 
@@ -149,18 +159,68 @@ def validate_input(row, column):
         Return:
             (boolean): Whether the inputs are valid or not
         '''
+    gs = game_board.print_game_state()
     if type(row) != int or type(column) != int:
         return False
-    return row > 0 and row < 4 and column > 0 and column < 4
+    if row > 0 and row < 4 and column > 0 and column < 4:
+        if gs[column + 3 * (row - 1)] == '*':
+            return True
+    return False
 
 
 # game_board = Board([1, 2, 3], [" ", " ", " "], [" ", " ", " "])
 # print(game_board)
 # a, b = game_board.detect_input()
 # game_board.validate_input(a, b)
+
 # gb = init_board(2)
 # print(gb)
 # print(gb.print_game_state())
 # print(gb.end_state())
 # gb.change_player()
 # print(gb.print_game_state())
+
+
+# gb = init_board(2)
+# print(gb)
+# gb.input_location(2, 2)
+# gb.change_player()
+# print(gb.print_game_state())
+# print(gb)
+# gb.input_location(1, 3)
+# gb.change_player()
+# print(gb.print_game_state())
+# print(gb)
+# gb.input_location(3, 1)
+# gb.change_player()
+# print(gb.print_game_state())
+# print(gb)
+# gb.input_location(2, 1)
+# gb.change_player()
+# print(gb.print_game_state())
+# print(gb)
+# gb.input_location(3, 2)
+# gb.change_player()
+# print(gb.print_game_state())
+# print(gb)
+# gb.input_location(1, 1)
+# gb.change_player()
+# print(gb.print_game_state())
+# print(gb)
+# gb.input_location(1, 2)
+# gb.change_player()
+# print(gb.print_game_state())
+
+gb = init_board(2)
+while gb.end_state() == 'n' and gb.print_game_state().find('*') != -1:
+    print(f"\n The current player is {gb.current_player}, please make your move.")
+    print("The current board is:")
+    print(gb)
+    row, column = detect_input(gb)
+    gb.input_location(row, column)
+    gb.change_player()
+gb.change_player()
+if gb.print_game_state().find('*') == -1:
+    print(f"Congratulations player {gb.current_player}")
+else:
+    print(f"It's a draw!")
