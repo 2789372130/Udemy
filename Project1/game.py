@@ -21,7 +21,10 @@ class Board:
         Prints the person's name and age.
     """
 
-    def __init__(self, row1, row2, row3):
+    current_player = 'O'
+
+    def __init__(self, player_number, row1, row2, row3):
+        self.player_number = player_number
         self.row1 = row1
         self.row2 = row2
         self.row3 = row3
@@ -36,6 +39,19 @@ class Board:
             f"{self.row3[0]} | {self.row3[1]} | {self.row3[2]}\n"
         # return f"{self.row1}\n{self.row2}\n{self.row3}"
 
+    def change_player(self):
+        if self.current_player == 'O':
+            self.current_player = 'X'
+        else:
+            self.current_player = 'O'
+        pass
+
+    def print_game_state(self):
+        return self.current_player +\
+            "".join(map(str, self.row1)) +\
+            "".join(map(str, self.row2)) +\
+            "".join(map(str, self.row3))
+
     def end_state(self):
         '''
         Check if the current game has a winner and declear the winner
@@ -48,20 +64,60 @@ class Board:
                         'X' if 'X' wins
                         'n' if there is no winner
         '''
-        
-        pass
+        gs = self.print_game_state()
+        if gs[1] == gs[2] == gs[3]:
+            if gs[1] == 'O':
+                return 'O'
+            elif gs[1] == 'X':
+                return 'X'
+        elif gs[4] == gs[5] == gs[6]:
+            if gs[4] == 'O':
+                return 'O'
+            elif gs[4] == 'X':
+                return 'X'
+        elif gs[7] == gs[8] == gs[9]:
+            if gs[7] == 'O':
+                return 'O'
+            elif gs[7] == 'X':
+                return 'X'
+        elif gs[1] == gs[5] == gs[9]:
+            if gs[1] == 'O':
+                return 'O'
+            elif gs[1] == 'X':
+                return 'X'
+        elif gs[3] == gs[5] == gs[7]:
+            if gs[3] == 'O':
+                return 'O'
+            elif gs[3] == 'X':
+                return 'X'
+        elif gs[1] == gs[4] == gs[7]:
+            if gs[1] == 'O':
+                return 'O'
+            elif gs[1] == 'X':
+                return 'X'
+        elif gs[2] == gs[5] == gs[8]:
+            if gs[2] == 'O':
+                return 'O'
+            elif gs[2] == 'X':
+                return 'X'
+        elif gs[3] == gs[6] == gs[9]:
+            if gs[3] == 'O':
+                return 'O'
+            elif gs[3] == 'X':
+                return 'X'
+        return 'n'
 
 # INIT_STATE = False
 
 
-def init_board():
+def init_board(player_number):
     '''
     Create an empty board
     '''
     # if INIT_STATE: pass
     row = ['*', '*', '*']
-    row2 = ['O', 'O', 'X']
-    game_board = Board(row, row, row)
+    row2 = ['O', 'X', 'O']
+    game_board = Board(player_number, row2, row2, row2)
     # INIT_STATE = True
     return game_board
 
@@ -85,11 +141,11 @@ def detect_input():
 def validate_input(row, column):
     '''
     Check if the inputs are valid
-    
+
         Parameters:
             row(int): Row number
             column(int): Column number
-        
+
         Return:
             (boolean): Whether the inputs are valid or not
         '''
@@ -98,11 +154,13 @@ def validate_input(row, column):
     return row > 0 and row < 4 and column > 0 and column < 4
 
 
-
-
 # game_board = Board([1, 2, 3], [" ", " ", " "], [" ", " ", " "])
 # print(game_board)
 # a, b = game_board.detect_input()
 # game_board.validate_input(a, b)
-gb = init_board()
-print(gb)
+# gb = init_board(2)
+# print(gb)
+# print(gb.print_game_state())
+# print(gb.end_state())
+# gb.change_player()
+# print(gb.print_game_state())
